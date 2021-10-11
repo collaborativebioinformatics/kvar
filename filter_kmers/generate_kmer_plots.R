@@ -1,12 +1,13 @@
 #!/usr/bin/Rscript
 
 library("ggplot2")
+library("data.table")
 
 args <- commandArgs(TRUE) 
 filename <- args[1]
 
 # Read input file
-data <- read.table(filename, sep="\t", col.names = c("kmers", "counts"))
+data <- data.table::fread(filename, sep="\t", header=F, col.names = c("kmers", "counts"))
 
 # Plots
 ggplot(data, aes(x=counts)) + geom_histogram() + theme_bw()
