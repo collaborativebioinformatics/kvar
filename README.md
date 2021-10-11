@@ -1,7 +1,7 @@
 ![Kvar logo](figures/kvar_logo.png)
 
 
-### **Kvar** is a pipeline for finding low frequency kmers in genomic data associated with disease. 
+### **Kvar** is a pipeline for finding low frequency kmers associated with disease using genomic data. 
 
 ## Description
 
