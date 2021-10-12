@@ -4,7 +4,7 @@ This file is the client for operating the TFIDF calculator,
 saving the output, and using the TFIDF matrix.
 
 Usage:
-    python kmer_selector.py --config testing/config_test.config 
+    python kmer_selector.py --config testing/config_test.config --output_prefix run_1
 """
 import argparse
 import AssociationFinder as AF
