@@ -17,3 +17,15 @@ python kmer_selector.py --config <Path to config> --output_prefix <output prefix
 ```
 python kmer_selector.py --config testing/config_test.config --output_prefix run_1
 ```
+
+## Setting up the config file
+This module requires a config file with paths to directories containing CSV files for positive and negative samples. For example,
+
+```
+[DEFAULT]
+config_name = testing files
+positive_file_path = /Users/dreyceyalbin/Desktop/kvar/kmer_analysis/testing/pos_dir/
+negative_file_path = /Users/dreyceyalbin/Desktop/kvar/kmer_analysis/testing/neg_dir/
+positive_label = Metastatic
+negative_label = Non-Metastatic
+```
