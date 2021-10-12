@@ -4,7 +4,8 @@
 3) Calculate the kmer coverage per sample : kcov = (L-k+1)/L * C
  where L is read length, k is kmer size, C is coverage per nucleotide
  Ex : k=21, L=100 then kcov = 0.88 * C
-4) Normalise the kmer frequencies by their average sample kmer coverage
+4) Normalise the kmer frequencies by their average sample kmer coverage 
+5) We can skip 3,4 and just normalize by total bases generated - useful for exome sequencing data (WES)
 
 ## USAGE
 * General
@@ -14,4 +15,8 @@ bash test_jellyfish.sh ksize nuc_coverage file1.fq.gz file2.fq.gz /path/to/outpu
 * Example
 ```
 bash test_jellyfish.sh 12 25 cancer_reads_1.fq.gz cancer_reads_2.fq.gz ./output
+```
+* Count total bases to normalize # output to stdout
+```
+bash estimate_totalbases.sh cancer_reads_1.fq.gz cancer_reads_2.fq.gz
 ```
