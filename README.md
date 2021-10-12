@@ -21,9 +21,26 @@ Here we develop a pipeline that takes as input samples sequencing data from to t
 
 **Dataset description.** As a proof of concept, we used whole exome sequencing (WES) of the NCI-60 dataset, a panel of 60 different human tumor cell lines widely used for the screening of compounds to detect potential anticancer activity.
 
-**K-mer counting.** K-mer frequencies were obtained for each sample, using the tool Jellyfish. First, counts of k-mers of size 31 were obtained with `jellyfish count` . Using a custom script, k-mers sequence and counts were tabulated to facilitate downstream analyses. The frequency distribution were plotted using R, and low frequency k-mers likely arising from sequencing errors were removed.
+**K-mer counting and filtering.** K-mer frequencies were obtained for each sample, using the tool Jellyfish. First, counts of k-mers of size 31 were obtained with `jellyfish count` . Using a custom script, k-mers sequence and counts were tabulated to facilitate downstream analyses. The frequency distribution were plotted using R, and low frequency k-mers likely arising from sequencing errors were removed.
 
-**Relevant k-mers selection.** TBD
+**Relevant k-mers selection.** Measure the relevance of k-mers to the condition using TF-IDF (term frequency-inverse document frequency) using pre-defined control and test datasets. K-mers significantly correlated too the disease are extracted using logistic regression followed by ranking and/or classification of the significant k-mers.
+
+**Inferring probable biological effects.** The genomic positions of the disease associated k-mers are identified and these positions are run through the ensembl-VEP pipeline to detect probable biological consequences. 
+
+## Workflow
+* I step
+- Count kmers in the dataset
+- Extract kmers and normalize frequencies by sequencing throughput
+* II step
+- Generate kmer distribution plots
+- Filter erroneous kmers based on the normalised distribution frequencies
+* III step
+- Calculate TF-IDF for the filtered kmers across samples
+- Using a logistic regression model to select significant kmers using the control and test datasets
+- Ranking the selected kmers
+* IV step
+- Map the significant kmers to the reference genome and create a table of positions
+- Infer biological effects using VEP
 
 ## USAGE
 
