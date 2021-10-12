@@ -21,9 +21,7 @@ Here we develop a pipeline that takes as input samples sequencing data from to t
 
 **Dataset description.** As a proof of concept, we used whole exome sequencing (WES) of the NCI-60 dataset, a panel of 60 different human tumor cell lines widely used for the screening of compounds to detect potential anticancer activity.
 
-**K-mer counting.** 
-
-**K-mer filtering.** TBD
+**K-mer counting.** K-mer frequencies were obtained for each sample, using the tool Jellyfish. First, counts of k-mers of size 31 were obtained with `jellyfish count` . Using a custom script, k-mers sequence and counts were tabulated to facilitate downstream analyses. The frequency distribution were plotted using R, and low frequency k-mers likely arising from sequencing errors were removed.
 
 **Relevant k-mers selection.** TBD
 
