@@ -31,6 +31,6 @@ jellyfish histo -t 10 mer_counts.jf > mer_counts.histo
 
 echo "  Dumping kmers "
 jellyfish dump mer_counts.jf > mer_counts.fasta
-paste - - mer_counts.fasta | sed -e 's/^>//' | awk -F'\t' -v nuc_cov="$nuc_cov" '{print $1"\t"$2/nuc_cov}' >mer_counts.normalised.tsv
+cat mer_counts.fasta | tr "\n" "\t" | sed -e 's/\t>/\n/g' -e 's/^>//' | awk -F'\t' '{print $2"\t"$1}' >mer_counts.normalised.tsv
 
 
