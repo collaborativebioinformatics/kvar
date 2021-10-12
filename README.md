@@ -28,17 +28,17 @@ Here we develop a pipeline that takes as input samples sequencing data from to t
 **Inferring probable biological effects.** The genomic positions of the disease associated k-mers are identified and these positions are run through the ensembl-VEP pipeline to detect probable biological consequences. 
 
 ## Workflow
-* I step
+** I step
 - Count kmers in the dataset
 - Extract kmers and normalize frequencies by sequencing throughput
-* II step
+** II step
 - Generate kmer distribution plots
 - Filter erroneous kmers based on the normalised distribution frequencies
-* III step
+** III step
 - Calculate TF-IDF for the filtered kmers across samples
 - Using a logistic regression model to select significant kmers using the control and test datasets
 - Ranking the selected kmers
-* IV step
+** IV step
 - Map the significant kmers to the reference genome and create a table of positions
 - Infer biological effects using VEP
 
