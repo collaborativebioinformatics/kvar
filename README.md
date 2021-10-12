@@ -11,7 +11,7 @@ The overall goal is to find low-frequency and consensus-level kmers that are ass
 
 ## Introduction
 
-Identifying k-mers—substrings of length _k_—is a common bioinformatics technique in bioinformatics, including applications in genome and transcriptome assembly, error correction of sequencing reads, and taxonomic classification of metagenomes. More recently, k-mers have been used for genotyping of structural variations in large datasets in a mapping-free manner. 
+Identifying k-mers—substrings of length _k_—is a common bioinformatics technique, including applications in genome and transcriptome assembly, error correction of sequencing reads, and taxonomic classification of metagenomes. More recently, k-mers have been used for genotyping of structural variations in large datasets in a mapping-free manner. 
 
 Sample comparison based on k-mers profiles provides a computationally efficient mapping-free way to address key differences between two biological conditions, avoiding the limitations of mappability and errors in the reference genome. Of particular interest are case-control studies, that allow to pinpoint genetic loci putatively implicated with a phenotype or a disease.
 
