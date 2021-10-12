@@ -9,8 +9,9 @@ Usage:
 import argparse
 import AssociationFinder as AF
 import pandas as pd 
-
-
+from sklearn.feature_selection import RFE
+from sklearn.linear_model import LogisticRegression
+import numpy as np
 
 def get_args():
     """
@@ -32,6 +33,22 @@ def get_args():
     )
     return parser.parse_args()
 
+def get_kmer_scores(training_data, training_labels):
+    """
+    This method returns the scores for each feature in
+    the training dataset.
+
+    In particular, this utilizes recursive feature elimination
+    using a logistic regression model from scikit learn. 
+    """
+    # start logistic regression model
+    logreg_model = LogisticRegression()
+    recFeatureElimination = RFE(logreg_model)
+    recFeatureElimination = recFeatureElimination.fit(training_data, training_labels)
+
+    # summarize the selection of the attributes
+    return recFeatureElimination.ranking_
+
 def main():
     args = get_args()
     print(args.config)
@@ -41,12 +58,19 @@ def main():
     training_x, training_y = tfidf_obj.obtain_tests_from_files()
     kmer2column = tfidf_obj.kmer2column
 
-    # save numpy array to csv
+    # save numpy array to csv/
     pd.DataFrame(training_x, 
                  columns=kmer2column.keys(),
-                 index=training_y).to_csv(args.output_prefix+".csv", 
+                 index=training_y).to_csv(args.output_prefix+"_TFIDF.csv", 
                                           header=True,
                                           index=True)
+
+    # use logisitic regression for multivariate feature selection.
+    kmer_ranking = get_kmer_scores(training_x, training_y)
+    kmer_ranking_array = np.array([[list(kmer2column.keys())[i], kmer_ranking[i]] 
+                                    for i in range(len(kmer_ranking))])
+    pd.DataFrame(kmer_ranking_array,
+                 columns=["kmer", "rank"]).to_csv(args.output_prefix+"_ranking.csv", header=True, index=False)
 
 if __name__ == "__main__":
     main()
