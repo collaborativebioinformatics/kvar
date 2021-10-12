@@ -11,3 +11,7 @@ compile-tasks:
 
 compile-workflow:
 	java -jar dxWDL-v1.50.jar compile ./workflow.wdl -project $(PROJECT_ID) -folder $(WORKFLOW_FOLDER)
+
+
+fmt:
+	black scripts/wf_launcher.py

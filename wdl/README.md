@@ -27,11 +27,11 @@ make compile-tasks
 
 ```
 
+## To launch workflow on folder of SRR fastqs
 
+Use scripts/wf_launcher.py
 
 ```bash
-
-
  python scripts/wf_launcher.py --input_folder=/data/PRJNA523380/WXS/ --output_folder=/wdl/test/wf/ --out_log=log.json
 
 
