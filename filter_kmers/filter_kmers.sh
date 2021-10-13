@@ -16,4 +16,4 @@ minkmercov = 9/$normalization_factor
 echo " Min k-mer coverage is " $minkmercov 
 
 echo "  Removing likely erroneous k-mers "
-awk -F "\t" -v var=$normalization_factor '{if($2>var){print}}' $input > $output
+awk -F "\t" -v var=$minkmercov '{if($2>var){print}}' $input > $output
