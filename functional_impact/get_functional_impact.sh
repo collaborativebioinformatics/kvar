@@ -24,8 +24,12 @@ mrsfast --index ${reference} -e ${edit_distance}
 mrsfast --search ${reference} --seq ${kmers_seq} --threads ${threads} -o mappings.sam
 
 
+# Sorting to bam
+samtools view -u mappings.sam | samtools sort -@ 4 -T $PWD/ -m 2G - sort.mappings
+
+
 # Calling variants
-freebayes -f $reference --min-alternate-count 1 mappings.sam > output.vcf
+freebayes -f $reference --min-alternate-count 1 sort.mappings.bam > output.vcf
 
 
 # Functional impact wit VEP
