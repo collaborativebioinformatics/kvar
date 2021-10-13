@@ -25,7 +25,7 @@ mrsfast --search ${reference} --seq ${kmers_seq} --threads ${threads} -o mapping
 
 
 # Calling variants
-freebayes -f $reference mappings.sam > output.vcf
+freebayes -f $reference --min-alternate-count 1 mappings.sam > output.vcf
 
 
 # Functional impact wit VEP
