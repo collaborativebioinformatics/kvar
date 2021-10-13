@@ -17,6 +17,7 @@ fi
 
 
 # Indexing human reference
+samtools index ${reference}
 mrsfast --index ${reference} -e ${edit_distance}
 
 
@@ -26,6 +27,7 @@ mrsfast --search ${reference} --seq ${kmers_seq} --threads ${threads} -o mapping
 
 # Sorting to bam
 samtools view -u mappings.sam | samtools sort -@ 4 -T $PWD/ -m 2G - sort.mappings
+samtools index sort.mappings.bam
 
 
 # Calling variants
