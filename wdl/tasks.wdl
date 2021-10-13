@@ -82,6 +82,7 @@ task calculate_normalized_kmer_counts {
 
   String sample_name = basename(kmer_fasta, '.mer_counts.fasta')
   String out_counts = sample_name + '.mer_counts.tsv'
+  String norm_factor = sample_name + '.normalization_factor.txt'
 
   command <<<
     set -exo pipefail
@@ -92,9 +93,45 @@ task calculate_normalized_kmer_counts {
       | awk -F'\t' -v nuc_cov=$nuc_cov '{print $2"\t"$1/nuc_cov}' \
       | sort -k2,2n  > ~{out_counts}
 
+    echo $nuc_cov > norm_cov.txt
+
   >>>
   output {
     File out_counts_file = out_counts
+    Float normalization_factor = read_float("norm_cov.txt")
+
+  }
+
+  runtime {
+    docker: "ubuntu:latest"
+    dx_instance_type: "mem1_ssd2_x4"
+  }
+}
+
+
+task filter_kmer {
+  input {
+    File normalized_kmer_counts_file
+    Float normalization_factor
+  }
+
+  String sample_name = basename(normalized_kmer_counts_file, '.mer_counts.tsv')
+  String filtered_file_name = sample_name + '.filtered_mer_counts.tsv'
+
+  command <<<
+  set -exo pipefail
+
+    minkmercov=$(perl -e "print(9/~{normalization_factor})")
+    echo " Min k-mer coverage is " $minkmercov
+
+    echo "  Removing likely erroneous k-mers "
+    awk -F "\t" -v var=$minkmercov '{if($2>var){print}}' \
+      "~{normalized_kmer_counts_file}" > "~{filtered_file_name}"
+
+  >>>
+
+  output {
+    File filtered_kmers = filtered_file_name
   }
 
   runtime {
