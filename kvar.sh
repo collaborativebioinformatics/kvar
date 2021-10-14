@@ -32,7 +32,7 @@ function run_kmerFinding() {
   # echo "2file 2 $file_2"
   # echo "2 output directory $out_path"
   # iteratively add genomes to the multifasta
-  if [[ ! -f ${out_path}/mer_counts.normalised.tsv ]]; then
+  if [[ ! -f ${out_path}_mer_counts.normalised.tsv ]]; then
     echo;echo; echo "Kvar: Running the kmer counting step."; echo;echo;
     bash ${DIR}/count_kmers/test_jellyfish.sh ${kmer_size} ${nuc_cov} ${fastq_1} ${fastq_2} ${out_path};
   else
