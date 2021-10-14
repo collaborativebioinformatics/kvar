@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Kvar Pipeline
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
 
 
 
@@ -33,7 +33,7 @@ function run_kmerFinding() {
                                               ${nuc_cov} \
                                               ${fastq_1} \
                                               ${fastq_2} \
-                                              ${out_path}
+                                              ${out_path};
   else
     echo "NOT running kmer counting step... already done";
   fi
@@ -57,24 +57,26 @@ function run_kmerFinding_directory() {
   local negative_fastq_dir=$2;
   local kmer_size=$3;
   local nuc_cov=$4;
-  local out_path=$5/;
+  local out_path=$5;
   # iteratively add genomes to the multifasta (POSITIVES)
   for fastq_file in $positive_fastq_dir/*_1.fa; do
-    out_prefix=${out_path}/positives/"$(basename -- ${fastq_file##_1.fa})"
+    out_prefix=${out_path}/positives/"$(basename -- ${fastq_file##_1.fa})";
     if [[ ! -f ${out_prefix} ]]; then
-      run_kmerFinding ${kmer_size} ${nuc_cov} ${fastq_file} ${fastq_file##_1.fa}_2.fa ${out_prefix}
+      run_kmerFinding ${kmer_size} ${nuc_cov} ${fastq_file} ${fastq_file##_1.fa}_2.fa ${out_prefix};
     else
       echo "NOT running kmer counting step for ${fastq_file} already done";
     fi
-
+  done
+  
   # iteratively add genomes to the multifasta (NEGATIVES)
   for fastq_file in $negative_fastq_dir/*_1.fa; do
-    out_prefix=${out_path}/negatives/"$(basename -- ${fastq_file##_1.fa})"
+    out_prefix=${out_path}/negatives/"$(basename -- ${fastq_file##_1.fa})";
     if [[ ! -f ${out_prefix} ]]; then
-      run_kmerFinding ${kmer_size} ${nuc_cov} ${fastq_file} ${fastq_file##_1.fa}_2.fa ${out_prefix}
+      run_kmerFinding ${kmer_size} ${nuc_cov} ${fastq_file} ${fastq_file##_1.fa}_2.fa ${out_prefix};
     else
       echo "NOT running kmer counting step for ${fastq_file} already done";
     fi
+  done
 }
 
 #######################################
