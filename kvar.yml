@@ -1,22 +1,36 @@
 name: kvar
 channels:
-  - bioconda
   - biobuilds
+  - bioconda
   - anaconda
   - conda-forge
   - defaults
 dependencies:
+  - bc=1.07.1=h0d85af4_0
   - blas=1.0=mkl
+  - bzip2=1.0.8=h0d85af4_4
+  - c-ares=1.17.2=h0d85af4_0
   - ca-certificates=2021.10.8=h033912b_0
   - certifi=2021.10.8=py38h50d1736_0
   - colorama=0.4.4=pyh9f0ad1d_0
+  - coreutils=8.25=1
+  - curl=7.79.1=hf45b732_1
+  - freebayes=1.3.5=py38h524e961_3
+  - htslib=1.12=hc38c3fb_1
   - intel-openmp=2020.2=258
-  - jellyfish=0.8.8=py38h96a0964_0
+  - jellyfish=2.2.10=h04f5b5a_1
+  - jemalloc=4.5.0=0
   - joblib=0.17.0=py_0
-  - libcxx=10.0.0=1
+  - krb5=1.19.2=hcfbf3a7_0
+  - libcurl=7.79.1=hf45b732_1
+  - libcxx=12.0.1=habf9029_0
+  - libdeflate=1.7=h35c211d_5
   - libedit=3.1.20191231=h1de35cc_1
+  - libev=4.33=haf1e3a3_1
   - libffi=3.3=hb1e8313_2
   - libgfortran=3.0.1=h93005f0_2
+  - libnghttp2=1.43.0=h6f36284_1
+  - libssh2=1.10.0=h52ee1ee_2
   - llvm-openmp=10.0.0=h28b9765_0
   - mkl=2019.4=233
   - mkl-service=2.3.0=py38hfbe908c_0
@@ -29,21 +43,29 @@ dependencies:
   - numpy-base=1.19.1=py38hcfb5961_0
   - openssl=1.1.1l=h0d85af4_0
   - pandas=1.1.3=py38hb1e8313_0
+  - parallel=20170422=pl5.22.0_0
+  - perl=5.22.0.1=0
   - pip=20.2.4=py38_0
   - python=3.8.5=h26836e1_1
   - python-dateutil=2.8.1=py_0
   - python_abi=3.8=2_cp38
   - pytz=2020.1=py_0
   - readline=8.0=h1de35cc_0
+  - samtools=1.4.1=0
   - scikit-learn=0.23.2=py38h959d312_0
   - scipy=1.5.0=py38hbab996c_0
   - setuptools=50.3.0=py38h0dc7051_1
   - six=1.15.0=py_0
   - sqlite=3.33.0=hffcf06c_0
+  - tabixpp=1.1.0=h9cabb03_6
   - threadpoolctl=2.1.0=pyh5ca1d4c_0
   - tk=8.6.10=hb0a8c7a_0
   - tqdm=4.62.3=pyhd8ed1ab_0
+  - vcflib=1.0.2=h9954cba_5
   - wheel=0.35.1=py_0
   - xz=5.2.5=h1de35cc_0
   - zlib=1.2.11=h1de35cc_3
+  - pip:
+    - nproc==1.5.2
+    - sklearn==0.0
 prefix: /Users/dreyceyalbin/miniconda/envs/kvar

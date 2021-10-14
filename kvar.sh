@@ -6,7 +6,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
 
 
 
-
 #######################################
 # run_kmerFinding()
 # uses jellyfish to find relevant kmers
@@ -26,14 +25,16 @@ function run_kmerFinding() {
   local fastq_1=$3;
   local fastq_2=$4;
   local out_path=$5;
+
+  # echo "2kmer size $kmer_size" 
+  # echo "2nuc coverage $nuc_cov"
+  # echo "2file 1 $file_1"
+  # echo "2file 2 $file_2"
+  # echo "2 output directory $out_path"
   # iteratively add genomes to the multifasta
   if [[ ! -f ${out_path}/mer_counts.normalised.tsv ]]; then
-    echo "Running the kmer counting step.";
-    bash ${DIR}/count_kmers/test_jellyfish.sh ${kmer_size} \
-                                              ${nuc_cov} \
-                                              ${fastq_1} \
-                                              ${fastq_2} \
-                                              ${out_path};
+    echo;echo; echo "Kvar: Running the kmer counting step."; echo;echo;
+    bash ${DIR}/count_kmers/test_jellyfish.sh ${kmer_size} ${nuc_cov} ${fastq_1} ${fastq_2} ${out_path};
   else
     echo "NOT running kmer counting step... already done";
   fi
@@ -58,21 +59,24 @@ function run_kmerFinding_directory() {
   local kmer_size=$3;
   local nuc_cov=$4;
   local out_path=$5;
+  # echo "1kmer size $kmer_size" 
+  # echo "1nuc coverage $nuc_cov"
+  # echo "1 output directory $out_path"
   # iteratively add genomes to the multifasta (POSITIVES)
-  for fastq_file in $positive_fastq_dir/*_1.fa; do
-    out_prefix=${out_path}/positives/"$(basename -- ${fastq_file##_1.fa})";
+  for fastq_file in $positive_fastq_dir*_1.fq.gz; do
+    out_prefix=${out_path}/pos_kmer_info/"$(basename -- ${fastq_file%_1.fq.gz})";
     if [[ ! -f ${out_prefix} ]]; then
-      run_kmerFinding ${kmer_size} ${nuc_cov} ${fastq_file} ${fastq_file##_1.fa}_2.fa ${out_prefix};
+      run_kmerFinding ${kmer_size} ${nuc_cov} ${fastq_file%_1.fq.gz}_1.fq.gz ${fastq_file%_1.fq.gz}_2.fq.gz ${out_prefix};
     else
       echo "NOT running kmer counting step for ${fastq_file} already done";
     fi
   done
-  
+
   # iteratively add genomes to the multifasta (NEGATIVES)
-  for fastq_file in $negative_fastq_dir/*_1.fa; do
-    out_prefix=${out_path}/negatives/"$(basename -- ${fastq_file##_1.fa})";
+  for fastq_file in $negative_fastq_dir*_1.fq.gz; do
+    out_prefix=${out_path}/neg_kmer_info/"$(basename -- ${fastq_file%_1.fq.gz})";
     if [[ ! -f ${out_prefix} ]]; then
-      run_kmerFinding ${kmer_size} ${nuc_cov} ${fastq_file} ${fastq_file##_1.fa}_2.fa ${out_prefix};
+      run_kmerFinding ${kmer_size} ${nuc_cov} ${fastq_file%_1.fq.gz}_1.fq.gz ${fastq_file%_1.fq.gz}_2.fq.gz ${out_prefix};
     else
       echo "NOT running kmer counting step for ${fastq_file} already done";
     fi
@@ -96,13 +100,15 @@ function run_kmerFinding_directory() {
 #######################################
 function run_kmerAnalysis() {
   # arguments
-  local pythonConfig=$1;
-  local outputPrefix=$2;
-  local kmer_cutoff=$3;
+  local pos_dir=$1;
+  local neg_dir=$2;
+  local outputPrefix=$3;
+  local kmer_cutoff=$4;
   # iteratively add genomes to the multifasta
   if [[ ! -f ${outputPrefix}.fa ]]; then
-    echo "Running the kmer Analysis step.";
-    python3 ${DIR}/kmer_analysis/kmer_selector.py --config ${pythonConfig} \
+    echo;echo; echo "Kvar: Running the kmer Analysis step.";echo;echo;
+    python3 ${DIR}/kmer_analysis/kmer_selector.py --positive_file_path ${pos_dir} \
+                                                  --negative_file_path ${neg_dir} \
                                                   --output ${outputPrefix} \
                                                   --kmer_cutoff ${kmer_cutoff} \
                                                   --fasta_out_path ${outputPrefix}.fa
@@ -136,13 +142,14 @@ function run_kmerMapping() {
   local threads=$5
   local output_directory=$6
   # iteratively add genomes to the multifasta
-  if [[ ! -f ${outputPrefix}.fa ]]; then
-    echo "Running the kmer mapping step.";
-    bash ${DIR}/get_functional_impact.sh ${reference} \
-                                         ${kmers_fasta}\
-                                         ${gff_file}\
-                                         ${edit_distance}\
-                                         ${threads}
+  if [[ ! -f ${output_directory}/output.vep.txt ]]; then
+    echo;echo; echo "Kvar: Running the kmer mapping step.";echo;echo;
+    bash ${DIR}/functional_impact/get_functional_impact.sh ${reference} \
+                                                           ${kmers_fasta}\
+                                                           ${gff_file}\
+                                                           ${edit_distance}\
+                                                           ${threads}\
+                                                           ${output_directory}
   else
     echo "NOT running kmer Mapping step - already finished";
   fi
@@ -160,17 +167,24 @@ function run_kmerMapping() {
 function main(){
     # input arguments
     local config_file=$1
-    source ${DIR}/kvar.config;
+    source $config_file;
     
     # define variables
     outputPrefix="kvar_analysis"
     # make the output directory structure
-    ${output_directory}/positives/
-    ${output_directory}/negatives/
+    mkdir ${output_directory}
+    mkdir ${output_directory}/positives/
+    mkdir ${output_directory}/negatives/
+    mkdir ${output_directory}/pos_kmer_info/
+    mkdir ${output_directory}/neg_kmer_info/
+    mkdir ${output_directory}/kmer_ranking/
+    mkdir ${output_directory}/variant_finding/
     # running underlying methods
     run_kmerFinding_directory ${positive_fastq_dir} ${negative_fastq_dir} ${kmer_size} ${nuc_cov} ${output_directory}
-    run_kmerAnalysis ${output_directory}/positives/ ${output_directory}/negatives/ ${outputPrefix} ${kmer_cutoff}
-    run_kmerMapping ${reference} ${outputPrefix}.fa ${gff_file} ${edit_distance} ${threads} ${output_directory}
+    mv ${output_directory}/pos_kmer_info/*tsv ${output_directory}/positives/;
+    mv ${output_directory}/neg_kmer_info/*tsv ${output_directory}/negatives/;
+    run_kmerAnalysis ${output_directory}/positives/ ${output_directory}/negatives/ ${output_directory}/kmer_ranking/k ${kmer_cutoff}
+    run_kmerMapping ${reference} ${outputPrefix}.fa ${gff_file} ${edit_distance} ${threads} ${output_directory}/variant_finding/
 }
 
 echo "Running Kvar.. ";
