@@ -1,7 +1,75 @@
 ![Kvar logo](figures/kvar_logo.png)
 
+### **Kvar** is a pipeline for finding kmers in genomic data associated with disease. 
 
-### **Kvar** is a pipeline for finding low frequency kmers in genomic data associated with disease. 
+# Using Kvar
+
+## dependencies
+* dont worry bout it - use the following with conda:
+```
+conda env create -f kvar.yml
+```
+
+## General Usage
+```
+bash kvar.sh kvar.config
+```
+
+## Setting up the config file.
+The only thing that needs set up is the config file. From here, everything else is completely automated.
+
+The config file requires information about the directories storing fastqs for the **positive** samples, and a directory for the **negative** samples. The positive and negative just refere to the fact that kvar finds kmers that allow for differentiating to sets of fastq files (for example, primary vs metastatic cancer). The directory structure for the input typically looks as follows:
+
+```
+kvar_example_out_dir/
+├── kvar.config
+├── negative_fastqs (DIRECTORY WITH FASTQ FILES, g-zipped)
+│   ├── neg_fastq_1_1.fastq.gz
+│   ├── neg_fastq_1_2.fastq.gz
+│   ├── neg_fastq_2_1.fastq.gz
+│   └── neg_fastq_2_2.fastq.gz
+├── positive_fastqs (DIRECTORY WITH FASTQ FILES, g-zipped)
+│   ├── pos_fastq_1_1.fastq.gz
+│   ├── pos_fastq_1_2.fastq.gz
+│   ├── pos_fastq_2_1.fastq.gz
+│   └── pos_fastq_2_2.fastq.gz
+├── reference_genome.fa
+└── reference_genome.gff3
+```
+
+With that set (congrats! we're almost there),  set up the `kvar.config` as follows:
+
+```
+## CHANGE THE FOLLOWING.
+positive_fastq_dir=/global/path/kvar_example_out_dir/positive_fastqs/
+negative_fastq_dir=/global/path/kvar_example_out_dir/negative_fastqs/
+reference=GRCh38_latest_genomic.fna # more info below
+gff_file=gencode.v38.primary_assembly.annotation.gff3 # more info below
+output_directory=./output_directory
+
+## BELOW CAN BE LEFT AS IS. (i.e. dont change, why make life hard?)
+edit_distance=1 #DEFAULT
+threads=4 #DEFAULT - threads being used on compute.
+kmer_size=31 #DEFAULT - kmer size used during analysis.
+nuc_cov=25 #DEFAULT - this is the coverage used for finding kmers.
+kmer_cutoff=50000 #DEFAULT - this is the total number of kmers to select from.
+```
+
+The only thing not discussed is obtaining a reference genome and associated gff3 file. We assume the user can find these online, but we give commands for obtaining the human reference and gff3 below. With all of that said, run the command above (i.e. `bash kvar.sh kvar.config`).
+
+## Obtaining Data (reference genome and associated gff3 file)
+The pipeline requires a reference genome and gff3 file (as seen in the config file). If you're working with, for example, tomatoes, then these files can be found online. If you're working with human samples, then the below commands will download the required data. 
+
+* obtain the primary human genome.
+```
+wget http://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/GRCh38.primary_assembly.genome.fa.gz
+```
+* obtain the gff32 file
+```
+wget http://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/gencode.v38.primary_assembly.annotation.gff3.gz
+```
+
+# More information on Kvar
 
 ## Description
 
@@ -41,15 +109,4 @@ Here we develop a pipeline that takes as input samples sequencing data from to t
 ### IV step
 - Map the significant kmers to the reference genome and create a table of positions
 - Infer biological effects using VEP
-
-## USAGE
-
-* General Usage
-```
-EXAMPLE OF HOW TO USE THE FULL PIPELINE WILL GO HERE, PATIENCE IS KEY ;)
-```
-* Example Usage
-```
-EXAMPLE OF HOW TO USE THE FULL PIPELINE WILL GO HERE, PATIENCE IS KEY ;)
-```
 
