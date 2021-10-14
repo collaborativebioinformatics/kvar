@@ -15,7 +15,6 @@ if [ "$#" -ne 6 ]; then
   exit 1 ;
 fi
 
-
 # Indexing human reference
 mrsfast --index ${reference} -e ${edit_distance}
 
@@ -23,7 +22,7 @@ mrsfast --index ${reference} -e ${edit_distance}
 mrsfast --search ${reference} --seq ${kmers_seq} --threads ${threads} -o ${output_directory}/mappings.sam
 
 # Calling variants
-freebayes -f ${reference} --min-alternate-count 1 mappings.sam > ${output_directory}/output.vcf
+freebayes -f ${reference} --min-alternate-count 1 ${output_directory}/mappings.sam > ${output_directory}/output.vcf
 
 # Functional impact wit VEP
 # GFF file must have index .tbi
