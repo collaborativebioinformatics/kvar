@@ -1,14 +1,21 @@
 ![Kvar logo](figures/kvar_logo.png)
 
-### **Kvar** is a pipeline for finding low frequency kmers in genomic data associated with disease. 
+### **Kvar** is a pipeline for finding kmers in genomic data associated with disease. 
 
 # Using Kvar
+
+## dependencies
+* dont worry bout it - use the following with conda:
+```
+conda env create -f kvar.yml
+```
+
 ## General Usage
 ```
 bash kvar.sh kvar.config
 ```
 
-## Setting up the config files.
+## Setting up the config file.
 The only thing that needs set up is the config file. From here, everything else is completely automated.
 
 The config file requires information about the directories storing fastqs for the **positive** samples, and a directory for the **negative** samples. The positive and negative just refere to the fact that kvar finds kmers that allow for differentiating to sets of fastq files (for example, primary vs metastatic cancer). The directory structure for the input typically looks as follows:
