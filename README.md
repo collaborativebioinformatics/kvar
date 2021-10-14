@@ -23,16 +23,16 @@ The config file requires information about the directories storing fastqs for th
 ```
 kvar_example_out_dir/
 ├── kvar.config
-├── negative_fastqs (DIRECTORY WITH FASTQ FILES, unzipped)
-│   ├── neg_fastq_1_1.fastq
-│   ├── neg_fastq_1_2.fastq
-│   ├── neg_fastq_2_1.fastq
-│   └── neg_fastq_2_2.fastq
-├── positive_fastqs (DIRECTORY WITH FASTQ FILES, unzipped)
-│   ├── pos_fastq_1_1.fastq
-│   ├── pos_fastq_1_2.fastq
-│   ├── pos_fastq_2_1.fastq
-│   └── pos_fastq_2_2.fastq
+├── negative_fastqs (DIRECTORY WITH FASTQ FILES, g-zipped)
+│   ├── neg_fastq_1_1.fastq.gz
+│   ├── neg_fastq_1_2.fastq.gz
+│   ├── neg_fastq_2_1.fastq.gz
+│   └── neg_fastq_2_2.fastq.gz
+├── positive_fastqs (DIRECTORY WITH FASTQ FILES, g-zipped)
+│   ├── pos_fastq_1_1.fastq.gz
+│   ├── pos_fastq_1_2.fastq.gz
+│   ├── pos_fastq_2_1.fastq.gz
+│   └── pos_fastq_2_2.fastq.gz
 ├── reference_genome.fa
 └── reference_genome.gff3
 ```
