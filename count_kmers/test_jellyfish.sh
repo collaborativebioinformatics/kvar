@@ -18,20 +18,15 @@ if [ "$#" -ne 5 ] || ! [[ ${nuc_cov} =~ ${whole_number} ]] || ! [[ ${kmersize} =
   exit 1 ;
 fi
 
-if [ ! -e "${outdir}1" ]; then
-  mkdir -p $outdir1 ;
-fi
-cd $outdir1 ;
-
 echo "  Running Jellyfish counting "
-jellyfish count -C -m $kmersize -s 100M -t $(eval nproc) <(zcat $file1) <(zcat $file2) -o mer_counts.jf
+jellyfish count -C -m $kmersize -s 100M -t $(eval nproc) <(zcat $file1) <(zcat $file2) -o ${outdir1}_mer_counts.jf
 
 echo "  Creating histogram "
-jellyfish histo -t 10 mer_counts.jf > mer_counts.histo
+jellyfish histo -t 10 ${outdir1}_mer_counts.jf > ${outdir1}_mer_counts.histo
 
 echo "  Dumping kmers "
-jellyfish dump mer_counts.jf > mer_counts.fasta
-cat mer_counts.fasta | paste - - | sed -e 's/^>//' | awk -F'\t' '{print $2"\t"$1}' | sort -k2,2nr >mer_counts.normalised.tsv
+jellyfish dump ${outdir1}_mer_counts.jf > ${outdir1}_mer_counts.fasta
+cat ${outdir1}_mer_counts.fasta | paste - - | sed -e 's/^>//' | awk -F'\t' '{print $2"\t"$1}' | sort -k2,2nr > ${outdir1}_mer_counts.normalised.tsv
 # This also works ==> cat mer_counts.fasta | tr "\n" "\t" | sed -e 's/\t>/\n/g' -e 's/^>//' | awk -F'\t' '{print $2"\t"$1}' >mer_counts.normalised.tsv
 
 
