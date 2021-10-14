@@ -88,7 +88,7 @@ class TFIDF_KvarFinder(AssociationFinder):
     def samples_to_review(self, samples: List[Path]) -> None:
         self._samples_to_review = samples
 
-    def initializer(self, config_file) -> None:
+    def initializer(self) -> None:
         """
         This method initilizes the TFIDF datastructure/object
         """
@@ -142,9 +142,15 @@ class TFIDF_KvarFinder(AssociationFinder):
                 if self.readbackwards:
                     csv_lines = [x for x in csv_file.readlines()[::-1][:kmers_per_sample]]
                 else:
-                    csv_lines = [next(csv_file) for x in range(kmers_per_sample)]
+                    try:
+                        csv_lines = [next(csv_file) for x in range(kmers_per_sample)]
+                    except StopIteration:
+                        with open(file_path) as csv_file:
+                            csv_lines = csv_file.readlines()
+                        print(f"Kvar WARNING: only obtaining {len(csv_lines)}")
                 for kmer_count, csv_row in enumerate(csv_lines):
                     kmer, freq = csv_row.strip("\n").split(delimiter)
+                    print(kmer, freq)
                     if float(freq) > 0:
                         self.doc2kmerfreqs[str(file_path)][kmer] = float(freq) # assumes unique kmers
                         self.unique_kmers.add(kmer)

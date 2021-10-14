@@ -41,12 +41,6 @@ def get_args():
         required=True,
     )
     parser.add_argument(
-        "--config",
-        "-c",
-        help="Path to config file for the kmer selection",
-        required=True,
-    )
-    parser.add_argument(
         "--output_prefix",
         "-o",
         help="Prefix and path to the output files",
@@ -112,7 +106,6 @@ def ranksarray2fasta(ranking_array, fasta_path):
 
 def main():
     args = get_args()
-    print(args.config)
 
     # get TF-IDF for all input files.
     if args.kmer_cutoff != None:
